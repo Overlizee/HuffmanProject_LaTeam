@@ -119,49 +119,74 @@ Node** from_avl_to_sorted_array(Tree* avl_tree){
     return occurence_list;
 }
 
-/*
+
 //function that creates the Huffman Tree
-Tree* create_huffman_tree(Tree* char_occurences, int size_array){
- 
+Tree* create_huffman_tree(Tree* char_occurences, int size_array) {
+
     Tree *huffman_tree;
     Queue *initial_queue, *temporary_queue;
- 
-    if( (char_occurences == NULL) || (*char_occurences == NULL) ){
+
+    if ((char_occurences == NULL) || (*char_occurences == NULL)) {
         return NULL;
-    }
-    else{
-        
-        initial_queue = create_Queue();
-        temporary_queue = create_Queue();
+    } else {
 
+        initial_queue = create_queue();
+        temporary_queue = create_queue();
+        //printf("queue : %d\n",is_empty_q(initial_queue));
+        printf("wtf : %c %c\n",char_occurences[0][0].character,char_occurences[0][1].character);
         //first we put every node in the first queue (in the good order)
-        for(i=0; i<size_array; i++){
-            enqueue(initial_queue, *(char_occurences+i));
+        for (int i = 0; i < size_array; i++) {
+            printf("Node i : %d , char %c\n",i,char_occurences[0][i].character);
+            enqueue(initial_queue,&(char_occurences[0][i]));
+            //dequeue(initial_queue);
         }
+        printf("End");
 
+
+        char c_node = '*';
+
+        Tree *node_1;
+
+        int value_queue_1;
         //keep on until the end, when we will have 0 element in initial_queue and 1 in temporary_queue
-        
-        
-        while(!((is_empty_q(initial_queue) == 0) && ((is_empty_q(temporary_queue) == 1) && (temporary_queue->values_of_queue->next == NULL)))){
-            
+        while (!((is_empty_q(initial_queue) == 0) &&
+                 ((is_empty_q(temporary_queue) == 1) && (temporary_queue->values_of_queue->next == NULL)))) {
+            // we need to get the 2 nodes where the occurences are the smallest
+            value_queue_1 = first_value_queue(initial_queue);
+            if (value_queue_1 == 0) {
+                (*node_1)->left = dequeue(temporary_queue);
+            } else if (value_queue_1 < first_value_queue(temporary_queue)) {
+                (*node_1)->left = dequeue(initial_queue);
+            } else {
+                (*node_1)->left = dequeue(temporary_queue);
+            }
 
+            value_queue_1 = first_value_queue(initial_queue);
+            if (value_queue_1 == 0) {
+                (*node_1)->right = dequeue(temporary_queue);
+            } else if (value_queue_1 < first_value_queue(temporary_queue)) {
+                (*node_1)->right = dequeue(initial_queue);
+            } else {
+                (*node_1)->right = dequeue(temporary_queue);
+            }
+            enqueue(temporary_queue, (*node_1));
+            printf("right : %c , left %c",(*node_1)->left->character,(*node_1)->right->character);
 
-            
-
-        }                                                 
-
-
+        }
+        (*huffman_tree) = dequeue(temporary_queue);
+        return huffman_tree;
+        /*
         void enqueue(Queue* queue, Node *node_to_enqueue);
         int is_empty_q(Queue* queue);
         Node* dequeue(Queue* queue);
-        
+
 
 
         element= return_smallest_element(char_occurences);
         remove_element_list(char_occurences, element);
         *huffman_tree = create_Node_for_tree(element->occurence, element->character);
         free(element);
- 
+
         while(*char_occurences != NULL){
             element= return_smallest_element(char_occurences);
             remove_element_list(char_occurences, element);
@@ -173,4 +198,7 @@ Tree* create_huffman_tree(Tree* char_occurences, int size_array){
         }
         return huffman_tree;
     }
-}*/
+    */
+
+    }
+}

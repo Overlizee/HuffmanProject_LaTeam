@@ -18,7 +18,11 @@ void printarr(Node *array, int n)
     int i;
     if (array != NULL){
         for (i = 0; i < n; i++){
-            printf("There are %d : %c\n",(array+i)->number_of_character, (array+i)->character);
+            if((array + i)->number_of_character == 1) {
+                printf("There is %d : %c\n",(array+i)->number_of_character, (array+i)->character);
+            } else {
+                printf("There are %d : %c\n",(array+i)->number_of_character, (array+i)->character);
+            }
         }
     }
 }

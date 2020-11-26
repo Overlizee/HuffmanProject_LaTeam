@@ -32,18 +32,26 @@ Queue* create_queue(){
 void enqueue(Queue* queue, Node *node_to_enqueue){
     List temp;
     if((node_to_enqueue != NULL) && (queue != NULL)){
+        //printf("Etape 1");
         if(queue->values_of_queue == NULL)
         {
+            //printf("Etape 2;1");
+            queue->values_of_queue = malloc(sizeof(List));
             queue->values_of_queue->nodes = node_to_enqueue;
-        }
-        else
-        {
+            queue->values_of_queue->next = NULL;
+            //printf("Etape 2");
+        } else {
+
             temp = queue->values_of_queue;
             while(temp->next != NULL)
             {
                 temp = temp->next;
+                //printf("AHHH");
             }
+            temp->next = malloc(sizeof(List));
             temp->next->nodes = node_to_enqueue;
+            queue->values_of_queue->next = NULL;
+            //printf("ETAPE 3");
         }
     }
 }
@@ -76,7 +84,13 @@ Node* dequeue(Queue* queue){
     }
     return node_to_release;
 }
-
+// function to get the first value of occurences from a queue
+int first_value_queue(Queue* queue) {
+    if(is_empty_q(queue) == 0) {
+        return queue->values_of_queue->nodes->number_of_character;
+    }
+    return 0;
+}
 //function to free a whole tree
 void trees_free_tree(Node* tree) {
     if (tree != NULL){

@@ -9,7 +9,7 @@ void display_number_of_character(char filename_param[]) {
     FILE *file_to_read;
     file_to_read = fopen(filename_param,"r");
     if(file_to_read == NULL) {
-        printf("ERROR while opening files\n");
+        printf("ERROR while opening file : %s \n",filename_param);
     } else {
         c = fgetc(file_to_read);
         while(c != EOF) {
@@ -28,7 +28,7 @@ Node** occurence_characters(char filename_param[]){
     file_to_read = fopen(filename_param,"r");
 
     if(file_to_read == NULL) {
-        printf("ERROR while opening files\n");
+        printf("ERROR while opening file : %s \n",filename_param);
     } 
     else {
         bst_characters = (Node**)malloc(sizeof(Node*));
