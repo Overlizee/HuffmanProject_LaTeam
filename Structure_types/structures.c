@@ -75,11 +75,15 @@ int is_empty_q(Queue* queue){
 //function to get a node out of the queue
 Node* dequeue(Queue* queue){
     Node* node_to_release = NULL;
+    printf("empty : %d",is_empty_q(queue));
     if(is_empty_q(queue) == 0){
 
         Element *old = queue->values_of_queue;
+        printf("1\n");
         queue->values_of_queue = queue->values_of_queue->next;
+        printf("2\n");
         node_to_release = old->nodes;
+        printf("3\n");
         free(old);
     }
     return node_to_release;

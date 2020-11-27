@@ -145,34 +145,37 @@ Tree* create_huffman_tree(Tree* char_occurences, int size_array) {
 
         char c_node = '*';
 
-        Tree *node_1;
 
-        int value_queue_1;
+        Tree *node_1 = malloc(sizeof(Tree));
+
+        int value_queue_1,value_queue_2;
+        //printf("Is empty : %d\n",is_empty_q(initial_queue));
+        //printf("Is empty : %d\n",is_empty_q(temporary_queue));
+
         //keep on until the end, when we will have 0 element in initial_queue and 1 in temporary_queue
-        while (!((is_empty_q(initial_queue) == 0) &&
-                 ((is_empty_q(temporary_queue) == 1) && (temporary_queue->values_of_queue->next == NULL)))) {
+        while ( is_empty_q(initial_queue) == 0 || is_empty_q(temporary_queue) == 1 ) {
             // we need to get the 2 nodes where the occurences are the smallest
             value_queue_1 = first_value_queue(initial_queue);
-            if (value_queue_1 == 0) {
+            value_queue_2 = first_value_queue(temporary_queue);
+            printf("Value queue 1 :%d\n",value_queue_1);
+            if (value_queue_1 == 0 ||(value_queue_1 > value_queue_2 && value_queue_2 != 0 )) {
                 (*node_1)->left = dequeue(temporary_queue);
-            } else if (value_queue_1 < first_value_queue(temporary_queue)) {
-                (*node_1)->left = dequeue(initial_queue);
             } else {
-                (*node_1)->left = dequeue(temporary_queue);
+                (*node_1)->left = dequeue(initial_queue);
             }
 
             value_queue_1 = first_value_queue(initial_queue);
-            if (value_queue_1 == 0) {
+            value_queue_2 = first_value_queue(temporary_queue);
+            if (value_queue_1 == 0 || ((value_queue_1 > value_queue_2) && value_queue_2 != 0)) {
                 (*node_1)->right = dequeue(temporary_queue);
-            } else if (value_queue_1 < first_value_queue(temporary_queue)) {
-                (*node_1)->right = dequeue(initial_queue);
             } else {
-                (*node_1)->right = dequeue(temporary_queue);
+                (*node_1)->right = dequeue(initial_queue);
             }
             enqueue(temporary_queue, (*node_1));
             printf("right : %c , left %c",(*node_1)->left->character,(*node_1)->right->character);
 
         }
+        printf("Sortie");
         (*huffman_tree) = dequeue(temporary_queue);
         return huffman_tree;
         /*
