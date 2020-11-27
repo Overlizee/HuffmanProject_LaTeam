@@ -173,7 +173,7 @@ void encoding_with_huffman(char filename_param_read[],char filename_param_dico[]
 int main() {
     Node **test_occurence, **sorted_array;
     Element *element;
-    Tree *huffman_tree;
+    Tree huffman_tree;
 
     //read_file(filename, filename_to_write);
     //display_number_of_character(filename);
@@ -184,16 +184,14 @@ int main() {
     printf("\n");
     
     sorted_array=from_avl_to_sorted_array(test_occurence);
+    printarr(*sorted_array, trees_count_nodes(test_occurence));
 
-    //printarr(*sorted_array, trees_count_nodes(test_occurence));
+    huffman_tree = create_huffman_tree(sorted_array, trees_count_nodes(test_occurence));
+    print_tree(huffman_tree);
+
+
 
 /*
-    huffman_tree = create_huffman_tree(test_occurence);
-
-    printf("\n\n%d, [%c]", (*huffman_tree)->number_of_character, (*huffman_tree)->character);
-    printf("\n\n%d, [%c]", (*huffman_tree)->right->number_of_character, (*huffman_tree)->right->character);
-    printf("\n\n%d, [%c]", (*huffman_tree)->left->number_of_character, (*huffman_tree)->left->character);
-
     //BLOCK THAT GOES TOGETHER !!
     FILE *file_to_write;
     file_to_write = fopen(filename_dico,"w");

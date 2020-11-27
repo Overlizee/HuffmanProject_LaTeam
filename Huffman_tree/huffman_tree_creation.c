@@ -91,8 +91,7 @@ void balance_BST(Node** tree){
 void tree_to_array(Tree tree, Node* array,int number_elements_tree){
     int cut_array_half;
     if((tree != NULL) && (number_elements_tree > 0)){
-        array->character = tree->character;
-        array->number_of_character = tree->number_of_character;
+        *array=*tree;
         //as there is one value "less" to deal with, we take in each tree half of the nummber of elements MINUS the one done in the function
         cut_array_half = (number_elements_tree-1)/2;
         tree_to_array(tree->left, array+1, trees_count_nodes(&(tree->left)));
@@ -109,6 +108,7 @@ Node** from_avl_to_sorted_array(Tree* avl_tree){
     if ((avl_tree != NULL) && (*avl_tree != NULL)){
         size_occurence_list = trees_count_nodes(avl_tree);
         occurence_list = (Node**)malloc(sizeof(Node*));
+        
         *occurence_list = (Node*)malloc(size_occurence_list*sizeof(Node));
         tree_to_array(*avl_tree, *occurence_list, size_occurence_list);
         //function to sort an array of Nodes depending on the number of occurences of each character
@@ -119,58 +119,47 @@ Node** from_avl_to_sorted_array(Tree* avl_tree){
     return occurence_list;
 }
 
-/*
-//function that creates the Huffman Tree
-Tree* create_huffman_tree(Tree* char_occurences, int size_array){
- 
-    Tree *huffman_tree;
-    Queue *initial_queue, *temporary_queue;
- 
-    if( (char_occurences == NULL) || (*char_occurences == NULL) ){
-        return NULL;
-    }
-    else{
-        
-        initial_queue = create_Queue();
-        temporary_queue = create_Queue();
+//functions that enables to dequeue the correcte queue depending on the values of the 2 queues
+void create_temp_trees(Node **node, Queue **initial_queue, Queue **temporary_queue){
 
+    int value_queue_1 = first_value_queue(*initial_queue);
+    int value_queue_2 = first_value_queue(*temporary_queue);
+    if((value_queue_1 == 0) || ((value_queue_1 >= value_queue_2) && (value_queue_2 != 0)) ) {
+        *node = dequeue(*temporary_queue);
+    }
+    else if((value_queue_2 == 0) || ((value_queue_2 > value_queue_1) && (value_queue_1 != 0 ))) {
+        *node = dequeue(*initial_queue);
+    }
+}
+
+//function that creates the Huffman Tree
+Tree create_huffman_tree(Node **char_occurences, int size_array) {
+ 
+    Tree huffman_tree;
+    Queue *initial_queue, *temporary_queue;
+    Node* node_1;
+    int value_queue_1,value_queue_2;
+    if ((char_occurences == NULL) || (*char_occurences == NULL)) {
+        return NULL;
+    } else {
+        initial_queue = create_queue();
+        temporary_queue = create_queue();
         //first we put every node in the first queue (in the good order)
-        for(i=0; i<size_array; i++){
-            enqueue(initial_queue, *(char_occurences+i));
-        }
+        for (int i = 0; i < size_array; i++) {
+            enqueue(initial_queue, &(char_occurences[0][i]));
+        } 
 
         //keep on until the end, when we will have 0 element in initial_queue and 1 in temporary_queue
-        
-        
-        while(!((is_empty_q(initial_queue) == 0) && ((is_empty_q(temporary_queue) == 1) && (temporary_queue->values_of_queue->next == NULL)))){
-            
-
-
-            
-
-        }                                                 
-
-
-        void enqueue(Queue* queue, Node *node_to_enqueue);
-        int is_empty_q(Queue* queue);
-        Node* dequeue(Queue* queue);
-        
-
-
-        element= return_smallest_element(char_occurences);
-        remove_element_list(char_occurences, element);
-        *huffman_tree = create_Node_for_tree(element->occurence, element->character);
-        free(element);
- 
-        while(*char_occurences != NULL){
-            element= return_smallest_element(char_occurences);
-            remove_element_list(char_occurences, element);
-            *huffman_tree_temporary = *huffman_tree;
-            *huffman_tree = create_Node_for_tree((element->occurence + (*huffman_tree_temporary)->number_of_character), 0);
-            (*huffman_tree)->left = create_Node_for_tree(element->occurence, element->character);
-            (*huffman_tree)->right = *huffman_tree_temporary;
-            free(element);
+        while( (is_empty_q(initial_queue) == 0) || ((is_empty_q(temporary_queue) == 0) && (temporary_queue->values_of_queue->next != NULL)) ){
+            // we need to get the 2 nodes where the occurences are the smallest
+            node_1 = create_Node_for_tree(0,0);
+            create_temp_trees(&(node_1->left), &initial_queue, &temporary_queue);
+            create_temp_trees(&(node_1->right), &initial_queue, &temporary_queue);
+            node_1->number_of_character = node_1->left->number_of_character + node_1->right->number_of_character;
+            enqueue(temporary_queue, node_1);
         }
+
+        huffman_tree = dequeue(temporary_queue);
         return huffman_tree;
     }
-}*/
+}
