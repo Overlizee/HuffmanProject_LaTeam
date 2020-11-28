@@ -27,6 +27,7 @@ Queue* create_queue();
 void enqueue(Queue* queue, Node *node_to_enqueue);
 int is_empty_q(Queue* queue);
 Node* dequeue(Queue* queue);
+void DisplayQueue(Queue *queue);
 void trees_free_tree(Node* tree);
 void print_tree(Tree tree);
 int trees_count_nodes(Node** tree);

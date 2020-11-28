@@ -189,7 +189,7 @@ int main() {
 
 
     huffman_tree = create_huffman_tree(sorted_array,trees_count_nodes(test_occurence));
-    //printf("DONE");
+    printf("DONE");
 
     printf("\n\n%d, [%c]", (*huffman_tree)->number_of_character, (*huffman_tree)->character);
     printf("\n\n%d, [%c]", (*huffman_tree)->right->number_of_character, (*huffman_tree)->right->character);

@@ -31,30 +31,21 @@ Queue* create_queue(){
 //function to add a node to a queue
 void enqueue(Queue* queue, Node *node_to_enqueue){
     List temp;
-    if((node_to_enqueue != NULL) && (queue != NULL)){
-        //printf("Etape 1");
-        if(queue->values_of_queue == NULL)
-        {
-            //printf("Etape 2;1");
-            queue->values_of_queue = malloc(sizeof(List));
-            queue->values_of_queue->nodes = node_to_enqueue;
-            queue->values_of_queue->next = NULL;
-            //printf("Etape 2");
-        } else {
-
-            temp = queue->values_of_queue;
-            while(temp->next != NULL)
-            {
-                temp = temp->next;
-                //printf("AHHH");
-            }
-            temp->next = malloc(sizeof(List));
-            temp->next->nodes = node_to_enqueue;
-            queue->values_of_queue->next = NULL;
-            //printf("ETAPE 3");
+    Element *new_element = malloc(sizeof(Element));
+    new_element->nodes = node_to_enqueue;
+    new_element->next = NULL;
+    if(queue->values_of_queue != NULL) {
+        Element *old = queue->values_of_queue;
+        while(old->next != NULL) {
+            old = old->next;
         }
+        old->next = new_element;
+    } else {
+        queue->values_of_queue = new_element;
     }
+
 }
+
 
 //function to check if the queue is empty or not
 //returns 1 if empty, 0 if not empty and -1 if queue is NULL
@@ -75,19 +66,29 @@ int is_empty_q(Queue* queue){
 //function to get a node out of the queue
 Node* dequeue(Queue* queue){
     Node* node_to_release = NULL;
-    printf("empty : %d",is_empty_q(queue));
+    printf("empty : %d\n",is_empty_q(queue));
     if(is_empty_q(queue) == 0){
 
         Element *old = queue->values_of_queue;
-        printf("1\n");
         queue->values_of_queue = queue->values_of_queue->next;
-        printf("2\n");
-        node_to_release = old->nodes;
-        printf("3\n");
+        node_to_release = create_Node_for_tree(old->nodes->number_of_character,old->nodes->character);
         free(old);
     }
     return node_to_release;
 }
+void DisplayQueue(Queue *queue) {
+    if(queue == NULL) {
+        exit(EXIT_FAILURE);
+    }
+    Element *element = queue->values_of_queue;
+    while (element != NULL) {
+        printf("%c|",element->nodes->character);
+        element = element->next;
+    }
+    printf("\n");
+}
+
+
 // function to get the first value of occurences from a queue
 int first_value_queue(Queue* queue) {
     if(is_empty_q(queue) == 0) {
