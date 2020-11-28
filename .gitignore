@@ -1,2 +1,24 @@
 
 *.exe
+*.iml
+*.xml
+*.cmake
+*.txt
+*.log
+*.check_cache
+*.make
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/C.includecache
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/depend.internal
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/File_interactions/files.c.obj
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/Huffman_tree/huffman_tree_creation.c.obj
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/includes_C.rsp
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/linklibs.rsp
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/main.c.obj
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/objects.a
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/objects1.rsp
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/Sorting_algorithms/sorting_algorithms.c.obj
+cmake-build-debug/CMakeFiles/HuffmanProject_LaTeam.dir/Structure_types/structures.c.obj
+cmake-build-debug/CMakeFiles/Makefile2
+cmake-build-debug/CMakeFiles/progress.marks
+cmake-build-debug/HuffmanProject_LaTeam.cbp
+cmake-build-debug/Makefile
