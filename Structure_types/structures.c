@@ -78,7 +78,9 @@ int first_value_queue(Queue* queue) {
     if(is_empty_q(queue) == 0) {
         return queue->values_of_queue->nodes->number_of_character;
     }
-    return 0;
+    else{
+        return 0;
+    }
 }
 //function to free a whole tree
 void trees_free_tree(Node* tree) {
@@ -107,17 +109,41 @@ int trees_count_nodes(Node** tree){
         return 0;
     }
 }
+
+//function to add a character at the end of a string
+char* add_char_to_string(char* string, char character){
  
-//Function to add a value to a Binary search tree
-void add_BST(Node** tree, int occurences, char val){
-    if (*tree == NULL){
-        *tree = create_Node_for_tree(1, val);
-    }
-    else if (val < (*tree)->character){
-        add_BST(&((*tree)->left), occurences, val);
+    char* new_string;
+    int size_string=0, i;
+    if(string == NULL){
+        new_string = (char*)malloc(2*sizeof(char));
+        new_string[0] = character;
+        new_string[1] = '\0';
     }
     else{
-        add_BST(&((*tree)->right), occurences, val);
+        while (string[size_string] != '\0'){
+            size_string++;
+        }
+        new_string = (char*)malloc( (size_string+2) *sizeof(char) );
+        for(i=0; i<size_string; i++){
+            new_string[i] = string[i];
+        }
+        new_string[size_string] = character;
+        new_string[size_string+1] = '\0';
     }
+    //we don't free string because we call this function twice in a row, thus we free it there
+    return new_string;
 }
- 
+
+//display queue (very useful to test and for maintenance)
+void DisplayQueue(Queue *queue) {
+    if(queue == NULL) {
+        exit(EXIT_FAILURE);
+    }
+    Element *element = queue->values_of_queue;
+    while (element != NULL) {
+        printf("%c|",element->nodes->character);
+        element = element->next;
+    }
+    printf("\n");
+}

@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "sorting_algorithms.h"
-#include "../Structure_types/structures.h"
 
 //function to swap two values
 void swap_two_values(Node* a, Node* b)
