@@ -163,3 +163,76 @@ void encoding_with_huffman(char filename_param_read[], char filename_param_write
         fclose(file_to_read);
     }
 }
+Tree create_huffman_to_decode(Tree huffman_tree,Node *node, char code[]) {
+    int i = 0;
+    int finished = 0;
+    printf("??\n");
+    for (int z = 0; z < 2; z ++ ) {
+        printf("CODE : %c\n",code[i]);
+    }
+    Tree temp_tree = huffman_tree;
+    int size_code = sizeof(code)/4;
+    printf("Size : %d",size_code);
+    while(finished == 0) {
+        printf("OUI\n");
+        if(code[i] == '0') {
+            if(temp_tree->left == NULL) {
+                temp_tree->left = node;
+                finished = 1;
+            } else {
+                temp_tree = temp_tree->left;
+            }
+        } else {
+            if(temp_tree->right == NULL) {
+                temp_tree->right = node;
+                finished = 1;
+            } else {
+                temp_tree->right = temp_tree;
+            }
+        }
+        i++;
+    }
+    return huffman_tree;
+
+}
+void decode_with_huffman(char filename_param_read[],char filename_param_write[]) {
+    FILE *file_to_read;
+    file_to_read = fopen(filename_param_read,"r");
+    Tree huffman_tree;
+    Queue *queue = create_queue();
+    if(file_to_read == NULL) {
+        printf("ERROR while opening file in function decode_with_huffman");
+    } else {
+        char line[50];
+        char node_character;
+        char *code = malloc(sizeof(char));
+
+        int GoNextLine;
+        Node *node;
+        int i;
+        while(fgets(line,50,file_to_read) != NULL){
+            printf("%s\n",line);
+            GoNextLine = 0;
+            i = 0;
+            while (GoNextLine != 1) {
+                if(line[i] == '\n') {
+                    GoNextLine = 1;
+                } else {
+
+                    if(line[i] != '0' && line[i] != '1') {
+                        node = create_Node_for_tree(0,line[i]);
+                    } else {
+                        printf("Line[%d] : %c\n",i,line[i]);
+                        add_char_to_string(code,line[i]);
+                        printf("CODE %c\n",code[0]);
+                    }
+                }
+                i += 1;
+            }
+            printf("CODE 0 : %c",code[0]);
+            printf("CODE 1 : %c",code[1]);
+            huffman_tree = create_huffman_to_decode(huffman_tree,node,code);
+        }
+    }
+}
+

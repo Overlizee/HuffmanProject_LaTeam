@@ -28,6 +28,7 @@ int main() {
     //print_tree(huffman_tree);
 
     encoding_with_huffman(filename,filename_to_write, &huffman_tree);
+    decode_with_huffman(filename_to_write,filename_to_write);
 
     return 0;
 }
