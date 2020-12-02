@@ -99,3 +99,40 @@ Tree create_huffman_tree(Tree *char_occurences, int size_array) {
         return huffman_tree;
     }
 }
+Tree create_huffman_to_decode(Tree huffman_tree,Node *node, char code[],int size) {
+    int i = 0;
+    Tree temp_tree = huffman_tree;
+    for(i = 0; i < size; i ++) {
+        //printf("i : %d\n",i);
+        if (i < size - 1) {
+            if (code[i] == '0') {
+                if (temp_tree->left == NULL) {
+                    Node *new_node = (Node*)malloc(sizeof(Node));
+                    new_node->left = NULL;
+                    new_node->right = NULL;
+                    temp_tree->left = new_node;
+                }
+                temp_tree = temp_tree->left;
+            } else {
+                if(temp_tree->right == NULL) {
+                    Node *new_node = (Node*)malloc(sizeof(Node));
+                    new_node->left = NULL;
+                    new_node->right = NULL;
+                    temp_tree->right = new_node;
+                }
+                temp_tree = temp_tree->right;
+            }
+        } else {
+            //printf("AHHH\n");
+            if(code[i] == '0') {
+                //printf("Current tree : %c",temp_tree->character);
+                //printf("Node char : %c",node->character);
+                temp_tree->left = node;
+            } else {
+                temp_tree->right = node;
+            }
+        }
+    }
+    return huffman_tree;
+
+}

@@ -12,4 +12,5 @@ void encoding_with_huffman(char filename_param_read[], char filename_param_write
 void decode_with_huffman(char filename_param_read[],char filename_param_write[]);
 
 
+
 #endif //FILES_H_INCLUDED

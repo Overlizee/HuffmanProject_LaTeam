@@ -94,7 +94,7 @@ void trees_free_tree(Node* tree) {
 //function to display a tree in prefix order
 void print_tree(Tree tree){
     if (tree != NULL){
-        printf("\nThe character [%c] has [%d] occurences", tree->character, tree->number_of_character);
+        //printf("\nThe character [%c] has [%d] occurences", tree->character, tree->number_of_character);
         print_tree(tree->left);
         print_tree(tree->right);
     }
@@ -144,8 +144,8 @@ void DisplayQueue(Queue *queue) {
     }
     Element *element = queue->values_of_queue;
     while (element != NULL) {
-        printf("%c|",element->nodes->character);
+        //printf("%c|",element->nodes->character);
         element = element->next;
     }
-    printf("\n");
+    //printf("\n");
 }

@@ -18,7 +18,7 @@ void display_number_of_character(char filename_param[]) {
             number_of_characters += 1;
             c =  fgetc(file_to_read);
         }
-        printf("There are %d characters in the text file\n",number_of_characters);
+        //printf("There are %d characters in the text file\n",number_of_characters);
     }
 }
 
@@ -73,7 +73,7 @@ void create_dictionary(Tree* huffman_tree, char filename_param_write[], char **a
             //we allocate the necessary space, with a +1 because the strlen function returns the length without '\0' at the end
             ascii_table_codes[(*huffman_tree)->character] = (char*)malloc((strlen(string)+1)*sizeof(char));
             strcpy(ascii_table_codes[(*huffman_tree)->character], string);
-            printf("\nchar : %c  ->   array : %s", (*huffman_tree)->character,ascii_table_codes[(*huffman_tree)->character] );
+            //printf("\nchar : %c  ->   array : %s", (*huffman_tree)->character,ascii_table_codes[(*huffman_tree)->character] );
         }
         else{
             create_dictionary(&((*huffman_tree)->left), filename_param_write, ascii_table_codes, add_char_to_string(string, 48));
@@ -163,43 +163,7 @@ void encoding_with_huffman(char filename_param_read[], char filename_param_write
         fclose(file_to_read);
     }
 }
-Tree create_huffman_to_decode(Tree huffman_tree,Node *node, char code[],int size) {
-    int i = 0;
-    Tree temp_tree = huffman_tree;
-    for(i = 0; i < size; i ++) {
-        printf("i : %d\n",i);
-        if (i < size - 1) {
-            if (code[i] == '0') {
-                if (temp_tree->left == NULL) {
-                    Node *new_node = (Node*)malloc(sizeof(Node));
-                    new_node->left = NULL;
-                    new_node->right = NULL;
-                    temp_tree->left = new_node;
-                }
-                temp_tree = temp_tree->left;
-            } else {
-                if(temp_tree->right == NULL) {
-                    Node *new_node = (Node*)malloc(sizeof(Node));
-                    new_node->left = NULL;
-                    new_node->right = NULL;
-                    temp_tree->right = new_node;
-                }
-                temp_tree = temp_tree->right;
-            }
-        } else {
-            printf("AHHH\n");
-            if(code[i] == '0') {
-                printf("Current tree : %c",temp_tree->character);
-                printf("Node char : %c",node->character);
-                temp_tree->left = node;
-            } else {
-                temp_tree->right = node;
-            }
-        }
-    }
-    return huffman_tree;
 
-}
 void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
     FILE *file_to_read;
     file_to_read = fopen(filename_param_read,"r");
@@ -216,7 +180,7 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
         int c;
         int count= 0;
         int return_line = 0;
-        printf("\n");
+        //printf("\n");
         do {
             c = fgetc(file_to_read);
             if(c != '\n') {
@@ -227,7 +191,7 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
                     return_line = 0;
                     if(c != '1' && c != '0') {
                         node = create_Node_for_tree(0,(char)c);
-                        printf("Node char : %c\n",node->character);
+                        //printf("Node char : %c\n",node->character);
                     } else {
                         code = realloc(code,size+1);
                         code[size] = (char)c;
@@ -249,7 +213,7 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
                 size = 0;
             }
         }while (c != EOF);
-        printf("CODE : %s\n",code);
+        //printf("CODE : %s\n",code);
         Tree temp_tree = huffman_tree;
 
         FILE* file_to_write;
@@ -264,7 +228,7 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
                 temp_tree = temp_tree->right;
             }
             if(temp_tree->left == NULL && temp_tree->right == NULL) {
-                printf("%c",temp_tree->character);
+                //printf("%c",temp_tree->character);
                 fputc(temp_tree->character,file_to_write);
                 temp_tree = huffman_tree;
             }
