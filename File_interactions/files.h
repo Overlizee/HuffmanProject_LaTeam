@@ -3,6 +3,7 @@
 
 #define filename "../Text_files/text.txt"
 #define filename_to_write "../Text_files/text_to_write.txt"
+#define filename_decode "../Text_files/decode.txt"
 
 void display_number_of_character(char filename_param[]);
 Node** occurence_characters(char filename_param[]);

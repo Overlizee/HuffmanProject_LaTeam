@@ -132,9 +132,7 @@ char* add_char_to_string(char* string, char character){
         new_string[size_string+1] = '\0';
     }
     for (int z = 0; z < sizeof(new_string); z++ ) {
-        printf("string : %c",new_string[z]);
     }
-    printf("\n");
     //we don't free string because we call this function twice in a row, thus we free it there
     return new_string;
 }
