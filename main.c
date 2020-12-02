@@ -26,8 +26,10 @@ int main() {
     //be careful, to activate this you have to assign a letter you know you won't 
     //use to the nodes where we don't, to win space and time.
     //print_tree(huffman_tree);
+    
 
     encoding_with_huffman(filename,filename_to_write, &huffman_tree);
+    decode_with_huffman(filename_to_write,filename_decode);
 
     return 0;
 }
