@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "structures.h"
+#include <conio.h>
  
 //function to create a new Node
 Node* create_Node_for_tree(int occurences, char letter) {
@@ -14,8 +15,7 @@ Node* create_Node_for_tree(int occurences, char letter) {
  
 //function to create a new Element
 Element* create_Element(Tree node_to_add) {
-    Element * new_el;
-    new_el = (Element*)malloc(sizeof(Element));
+    Element * new_el = (Element*)malloc(sizeof(Element));
     new_el->nodes = node_to_add;
     new_el->next = NULL;
     return new_el;
@@ -30,9 +30,7 @@ Queue* create_queue(){
  
 //function to add a node to a queue
 void enqueue(Queue* queue, Node *node_to_enqueue){
-    Element *new_element = (Element*)malloc(sizeof(Element));
-    new_element->nodes = node_to_enqueue;
-    new_element->next = NULL;
+    Element *new_element = create_Element(node_to_enqueue);
 
     if(queue->values_of_queue != NULL) {
         Element *old = queue->values_of_queue;
@@ -148,4 +146,98 @@ void DisplayQueue(Queue *queue) {
         element = element->next;
     }
     //printf("\n");
+}
+
+int display_intro(){
+    
+    int ch1=0, value=0, i, j;
+    char tab_options[5][30];
+
+    for (i=0; i<5; i++)
+    {
+        for(j=0; j<30; j++)
+        {
+            tab_options[i][j] = 32;
+        }
+    }
+
+    tab_options[2][2] = 'E';
+    tab_options[2][3] = 'n';
+    tab_options[2][4] = 'c';
+    tab_options[2][5] = 'o';
+    tab_options[2][6] = 'd';
+    tab_options[2][7] = 'e';
+
+    tab_options[2][12] = 'D';
+    tab_options[2][13] = 'e';
+    tab_options[2][14] = 'c';
+    tab_options[2][15] = 'o';
+    tab_options[2][16] = 'd';
+    tab_options[2][17] = 'e';
+
+    tab_options[2][23] = 'Q';
+    tab_options[2][24] = 'u';
+    tab_options[2][25] = 'i';
+    tab_options[2][26] = 't';
+
+    while(ch1 != 13)
+    {
+
+        //We create and move the box's position. The box will enable to select the option we want
+        tab_options[0][value] = 201;
+        tab_options[0][value+9] = 187;
+        tab_options[4][value] = 200;
+        tab_options[4][value+9] = 188;
+
+        for (i=value+1; i<(value+9); i++)
+        {
+            tab_options[0][i] = 205;
+            tab_options[4][i] = 205;
+        }
+
+        for(i=0; i<3; i++)
+        {
+            tab_options[i+1][value] = 186;
+            tab_options[i+1][value+9] = 186;
+        }
+
+
+        //Every time, we print it after renewing the screen, in order to see the box surrounding the selected option move
+        system("cls");
+        printf("\n\nSelect with the arrows of your keyboards what you want to do :\n\n\n");
+
+        for(i=0; i<5; i++)
+        {
+            printf("\n");
+            for(j=0; j<30; j++)
+            {
+                printf("%c", tab_options[i][j]);
+            }
+        }
+
+        for (i=value; i<(value+10); i++)
+        {
+            tab_options[0][i] = 32;
+            tab_options[4][i] = 32;
+        }
+
+        for(i=0; i<3; i++)
+        {
+            tab_options[i+1][value] = 32;
+            tab_options[i+1][value+9] = 32;
+        }
+
+        ch1 = getch();
+        if(ch1 == 75){
+            if (value>0)
+                value -= 10;
+        }
+        //if user presses right arrow, box moves right if possible (not on far right)
+        else if(ch1 == 77){
+            if (value<20)
+                value += 10;
+        }
+    }
+    system("cls");
+    return value;
 }

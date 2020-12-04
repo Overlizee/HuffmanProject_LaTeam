@@ -6,14 +6,12 @@
 
 //function that transfers a tree into an array
 void tree_to_array(Tree tree, Node* array,int number_elements_tree){
-    int cut_array_half;
     if((tree != NULL) && (number_elements_tree > 0)){
         array->character = tree->character;
         array->number_of_character = tree->number_of_character;
         array->left=NULL;
         array->right=NULL;
         //as there is one value "less" to deal with, we take in each tree half of the nummber of elements MINUS the one done in the function
-        cut_array_half = (number_elements_tree-1)/2;
         tree_to_array(tree->left, array+1, trees_count_nodes(&(tree->left)));
         tree_to_array(tree->right, array+1+trees_count_nodes(&(tree->left)), trees_count_nodes(&(tree->right)));
     }
@@ -96,6 +94,8 @@ Tree create_huffman_tree(Tree *char_occurences, int size_array) {
             //printf("\n------------------------");
         }
         huffman_tree = dequeue(temporary_queue);
+        free(initial_queue);
+        free(temporary_queue);
         return huffman_tree;
     }
 }

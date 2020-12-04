@@ -4,9 +4,10 @@
 #include "../Structure_types/structures.h"
 #include "../Huffman_tree/huffman_tree_creation.h"
 #include "../Avl_module/avl.h"
+#include "files.h"
 
 //function to display the number of characters in a whole text
-void display_number_of_character(char filename_param[]) {
+int number_of_character(char filename_param[]) {
     int c, number_of_characters = 0;
     FILE *file_to_read;
     file_to_read = fopen(filename_param,"r");
@@ -18,8 +19,8 @@ void display_number_of_character(char filename_param[]) {
             number_of_characters += 1;
             c =  fgetc(file_to_read);
         }
-        //printf("There are %d characters in the text file\n",number_of_characters);
     }
+    return number_of_characters;
 }
 
 //function to get the AVL tree of the number of occurences of each character
@@ -64,110 +65,64 @@ Node** occurence_characters(char filename_param[]){
 }
 
 //function to create the dictionary and fill the array of character codes
-void create_dictionary(Tree* huffman_tree, char filename_param_write[], char **ascii_table_codes, char* string){
-    FILE *file_to_write;
-    file_to_write = fopen(filename_param_write,"a+");
+void create_dictionary(Tree* huffman_tree, char ascii_table_codes[256][50], char* string){
     if ((huffman_tree != NULL) && (*huffman_tree != NULL)){
         if((*huffman_tree)->left == NULL && (*huffman_tree)->right == NULL){
-            fprintf(file_to_write,"%c%s\n", (*huffman_tree)->character, string);
-            //we allocate the necessary space, with a +1 because the strlen function returns the length without '\0' at the end
-            ascii_table_codes[(*huffman_tree)->character] = (char*)malloc((strlen(string)+1)*sizeof(char));
             strcpy(ascii_table_codes[(*huffman_tree)->character], string);
             //printf("\nchar : %c  ->   array : %s", (*huffman_tree)->character,ascii_table_codes[(*huffman_tree)->character] );
         }
         else{
-            create_dictionary(&((*huffman_tree)->left), filename_param_write, ascii_table_codes, add_char_to_string(string, 48));
-            create_dictionary(&((*huffman_tree)->right), filename_param_write, ascii_table_codes, add_char_to_string(string, 49));
+            create_dictionary(&((*huffman_tree)->left), ascii_table_codes, add_char_to_string(string, 48));
+            create_dictionary(&((*huffman_tree)->right), ascii_table_codes, add_char_to_string(string, 49));
         }
     }
-    fclose(file_to_write);
+    free(string);
 }
-
-/*char** create_text_dico_file(Tree *huffman_tree, char filename_param_write[]){
-    //array of 256 characters where we will store the codes of all concerned characters (those in the text)
-    char **ascii_table_codes = (char**)malloc(256*sizeof(char*));
-    FILE *file_to_write = fopen(filename_param_write,"w");
-    fclose(file_to_write);
-    create_dictionary(huffman_tree, filename_param_write, ascii_table_codes, NULL);
-    return ascii_table_codes;
-}*/
-
-/*char* return_binary_code_character(char* Array,int Letter,char filename_param_dico[]) {
-    FILE *file_to_read;
-    file_to_read = fopen(filename_param_dico,"r");
-
-    if(file_to_read == NULL) {
-        printf("The file could not be opened");
-    } else {
-        int c;
-        c = fgetc(file_to_read);
-        if (Letter == '0'){
-            while(c != EOF && c != '.') {
-                c = fgetc(file_to_read);
-                if (c == '.'){
-                    c = fgetc(file_to_read);
-                }
-            }
-            c = fgetc(file_to_read);
-        }
-        else if (Letter == '1'){
-            while(c != EOF && c != ',') {
-                c = fgetc(file_to_read);
-                if (c == ','){
-                    c = fgetc(file_to_read);
-                }
-            }
-            c = fgetc(file_to_read);
-        }
-        else{
-            while(c != EOF && c != Letter) {
-                c = fgetc(file_to_read);
-                //printf("c : %c\n",c);
-            }
-        }
-        c = fgetc(file_to_read); // to get to the first char of the binary code
-        while((c == '1') || (c == '0')) {
-            Array = add_char_to_string(Array,c);
-            c = fgetc(file_to_read);
-        }
-    }
-    return Array;
-}
-*/
 
 //function to encode the text into new file, containing dictionary and bit sequence
 void encoding_with_huffman(char filename_param_read[], char filename_param_write[], Tree *huffman_tree) {
     FILE *file_to_read;
     file_to_read = fopen(filename_param_read,"r");
-
+    int i;
     if(file_to_read == NULL) {
         printf("The file could not be opened");
     }
     else {
-        FILE *file_to_write = fopen(filename_param_write,"w");
-        fclose(file_to_write);
         //array of 256 characters where we will store the codes of all concerned characters (those in the text)
-        char **ascii_table_codes = (char**)malloc(256*sizeof(char*));
-
-        create_dictionary(huffman_tree, filename_param_write, ascii_table_codes, NULL);
-        file_to_write = fopen(filename_param_write,"a+");
-        fprintf(file_to_write,"\n\n");
-        int c = fgetc(file_to_read);
-        while(c != EOF) {
-            //we write the code of each character, stocked in the array of char* of size 256
-            fprintf(file_to_write,"%s", ascii_table_codes[c]);
-            c = fgetc(file_to_read);
+        //we use a static array to win time, as we can use more space
+        char ascii_table_codes[256][50];
+        for(i=0; i<256; i++){
+                ascii_table_codes[i][0] = '\0';
         }
-        //close both files
-        fclose(file_to_write);
-        fclose(file_to_read);
+        create_dictionary(huffman_tree, ascii_table_codes, NULL);
+        int nbr_char_decompressed = number_of_character(filename_param_read);
+        if (nbr_char_decompressed != 0){
+            FILE *file_to_write = fopen(filename_param_write,"w");
+
+            for(i=0; i<256; i++){
+                if (ascii_table_codes[i][0] != '\0')
+                fprintf(file_to_write,"%c%s\n", i, ascii_table_codes[i]);
+            }
+            fprintf(file_to_write,"\n\n");
+            int c = fgetc(file_to_read);
+            while(c != EOF) {
+                //we write the code of each character, stocked in the array of char* of size 256
+                fprintf(file_to_write,"%s", ascii_table_codes[c]);
+                c = fgetc(file_to_read);
+            }
+            //close both files
+            fclose(file_to_write);
+        }
     }
+    fclose(file_to_read);
 }
 
 void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
     FILE *file_to_read;
     file_to_read = fopen(filename_param_read,"r");
-    Tree huffman_tree = create_Node_for_tree(0,'*');
+    Tree huffman_tree = (Node*)malloc(sizeof(Node));
+    huffman_tree->left = NULL;
+    huffman_tree->right = NULL;
     Queue *queue = create_queue();
     if(file_to_read == NULL) {
         printf("ERROR while opening file in function decode_with_huffman");
@@ -185,12 +140,18 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
             c = fgetc(file_to_read);
             if(c != '\n') {
                 if(return_line == 2) {
-                    node = create_Node_for_tree(0,'\n');
+                    Tree node = (Node*)malloc(sizeof(Node));
+                    node->left = NULL;
+                    node->right = NULL;
+                    node->character = '\n';
                 }
                 if(return_line != 3) {
                     return_line = 0;
                     if(c != '1' && c != '0') {
-                        node = create_Node_for_tree(0,(char)c);
+                        Tree node = (Node*)malloc(sizeof(Node));
+                        node->left = NULL;
+                        node->right = NULL;
+                        node->character = c;
                         //printf("Node char : %c\n",node->character);
                     } else {
                         code = realloc(code,size+1);
@@ -233,7 +194,9 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
                 temp_tree = huffman_tree;
             }
         }
+        fclose(file_to_write);
 
     }
+    fclose(file_to_read);
 }
 

@@ -31,5 +31,6 @@ void print_tree(Tree tree);
 int trees_count_nodes(Node** tree);
 char* add_char_to_string(char* string, char character);
 void DisplayQueue(Queue *queue);
+int display_intro();
  
 #endif //STRUCTURES_H_INCLUDED
