@@ -100,8 +100,9 @@ void encoding_with_huffman(char filename_param_read[], char filename_param_write
             FILE *file_to_write = fopen(filename_param_write,"w");
 
             for(i=0; i<256; i++){
-                if (ascii_table_codes[i][0] != '\0')
-                fprintf(file_to_write,"%c%s\n", i, ascii_table_codes[i]);
+                if (ascii_table_codes[255-i][0] != '\0') {
+                    fprintf(file_to_write,"%c%s\n", 255-i, ascii_table_codes[255-i]);
+                }
             }
             fprintf(file_to_write,"\n\n");
             int c = fgetc(file_to_read);
@@ -140,7 +141,7 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
             c = fgetc(file_to_read);
             if(c != '\n') {
                 if(return_line == 2) {
-                    Tree node = (Node*)malloc(sizeof(Node));
+                    node = (Node*)malloc(sizeof(Node));
                     node->left = NULL;
                     node->right = NULL;
                     node->character = '\n';
@@ -148,11 +149,10 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
                 if(return_line != 3) {
                     return_line = 0;
                     if(c != '1' && c != '0') {
-                        Tree node = (Node*)malloc(sizeof(Node));
+                        node = (Node*)malloc(sizeof(Node));
                         node->left = NULL;
                         node->right = NULL;
                         node->character = c;
-                        //printf("Node char : %c\n",node->character);
                     } else {
                         code = realloc(code,size+1);
                         code[size] = (char)c;
@@ -163,10 +163,9 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
                     code[size] = (char)c;
                     size += 1;
                 }
-
-
             } else {
                 return_line += 1;
+                //printf("%c",node->right->character);
                 create_huffman_to_decode(huffman_tree,node,code,size);
                 memset(code, 0, sizeof(code));
                 free(code);

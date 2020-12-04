@@ -19,7 +19,6 @@ int main() {
     value_main = display_intro();
     
     if(value_main == 0){
-
         t1 = clock();
 
         test_occurence = occurence_characters(filename);
