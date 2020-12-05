@@ -20,6 +20,8 @@ typedef struct Queue{
 } Queue;
 
 Node* create_Node_for_tree(int occurences, char letter);
+Node* create_Node_char_only(char letter);
+Node* create_empty_Node();
 Element* create_Element(Tree node_to_add);
 Queue* create_queue();
 void enqueue(Queue* queue, Node *node_to_enqueue);

@@ -141,18 +141,12 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
             c = fgetc(file_to_read);
             if(c != '\n') {
                 if(return_line == 2) {
-                    node = (Node*)malloc(sizeof(Node));
-                    node->left = NULL;
-                    node->right = NULL;
-                    node->character = '\n';
+                    node = create_Node_char_only('\n');
                 }
                 if(return_line != 3) {
                     return_line = 0;
                     if(c != '1' && c != '0') {
-                        node = (Node*)malloc(sizeof(Node));
-                        node->left = NULL;
-                        node->right = NULL;
-                        node->character = c;
+                        node = create_Node_char_only(c);
                     } else {
                         code = realloc(code,size+1);
                         code[size] = (char)c;
@@ -165,7 +159,6 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
                 }
             } else {
                 return_line += 1;
-                //printf("%c",node->right->character);
                 create_huffman_to_decode(huffman_tree,node,code,size);
                 memset(code, 0, sizeof(code));
                 free(code);
@@ -173,6 +166,7 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
                 size = 0;
             }
         }while (c != EOF);
+        fclose(file_to_read);
         //printf("CODE : %s\n",code);
         Tree temp_tree = huffman_tree;
 
@@ -193,9 +187,10 @@ void decode_with_huffman(char filename_param_read[],char filename_dico[]) {
                 temp_tree = huffman_tree;
             }
         }
+        free(code);
         fclose(file_to_write);
 
     }
-    fclose(file_to_read);
+
 }
 

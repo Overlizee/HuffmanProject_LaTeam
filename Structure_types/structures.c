@@ -12,6 +12,19 @@ Node* create_Node_for_tree(int occurences, char letter) {
     new_node->right = NULL;
     return new_node;
 }
+Node* create_Node_char_only(char letter) {
+    Node* new_node = malloc(sizeof(Node));
+    new_node->character = letter;
+    new_node->left = NULL;
+    new_node->right = NULL;
+    return new_node;
+}
+Node* create_empty_Node() {
+    Node* new_node = malloc(sizeof(Node));
+    new_node->left = NULL;
+    new_node->right = NULL;
+    return new_node;
+}
  
 //function to create a new Element
 Element* create_Element(Tree node_to_add) {
